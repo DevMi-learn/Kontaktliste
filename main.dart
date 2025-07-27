@@ -33,8 +33,9 @@ class Person
 
 Future<void> main() async
 {
-  List<Person> kontakte = await ladeKontakte();
   bool run = true;
+  String speicherdatei = 'kontakte.json';
+  List<Person> kontakte = await ladeKontakte(speicherdatei);
 
 
   while(run)
@@ -102,6 +103,7 @@ Future<void> main() async
             int alterMin = alterEingabe('Von');
             int alterMax = alterEingabe('Bis');
             sucheNachAlterBereich(kontakte, alterMin, alterMax);
+          break;
 
           case 'telefon':
             String telefonNR = telefonNREingabe();
@@ -119,7 +121,7 @@ Future<void> main() async
       break;
 
       case 'beenden':
-        await speicherKontakte(kontakte);
+        await speicherKontakte(kontakte, speicherdatei);
         run = false;
         print("-------------------\n Programm beendet.\n-------------------\n");
       break;
@@ -359,22 +361,22 @@ List<Person> sortiereListe(List<Person> kontakte)
   return kopieKontakte;
 }
 
-Future<void> speicherKontakte(List<Person> kontakte) async
+Future<void> speicherKontakte(List<Person> kontakte, String dateiname) async
 {
   var jsonListe = kontakte.map((person) => person.toJson()).toList(); //Liste(Person) zu Liste(Map)
 
   String jsonString = jsonEncode(jsonListe);                          //Liste(Map) zu String
   
-  File datei = File('kontakte.json');                                 
+  File datei = File(dateiname);                                 
   await datei.writeAsString(jsonString);                              //String zu Datei
 
   print("Kontakte erfolgreich gespeichert.\n");
 }
 
-Future<List<Person>> ladeKontakte() async {
+Future<List<Person>> ladeKontakte(String dateiname) async {
   try
   {
-    String jsonString = await File('kontakte.json').readAsString();       //Datei zu String
+    String jsonString = await File(dateiname).readAsString();       //Datei zu String
     List<dynamic> jsonListe = jsonDecode(jsonString);                     //String zu Liste(Map)
     return jsonListe.map((eintrag) => Person.fromJson(eintrag)).toList(); //Liste(Map) zu Liste(Person)
   }
