@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 
 
@@ -6,7 +7,7 @@ class Person
 {
   String name;
   int alter;
-  int telefonnummer;
+  String telefonnummer;
 
   Person(this.name, this.alter, this.telefonnummer);
 
@@ -14,25 +15,29 @@ class Person
   {
     print("- Name: $name   Alter: $alter   Tel.Nr.: $telefonnummer");
   }
+
+ Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'alter': alter,
+      'telefonnummer': telefonnummer
+    };
+  }
+
+  Person.fromJson(Map<String, dynamic> json):
+      name = json['name'],
+      alter = json['alter'],
+      telefonnummer = json['telefonnummer'];
 }
 
 
 void main()
 {
-  List<Person> kontakte = [
-    Person("Max", 22, 01234),
-    Person("Hans", 34, 123),
-    Person("Max", 33, 234),
-    Person("Peter", 12, 345),
-    Person("Petra", 21, 456),
-    Person("Uwe", 56, 01234),
-    Person("Max", 60, 567),
-    Person("Petra", 22, 678),
-    Person("max", 5, 1111),
-    Person("Marion", 56, 45678)
-  ];
+  List<Person> kontakte = [];
   bool run = true;
 
+  // Future<List<Person>>k = ladeKontakte();
+  // kontakte = List<Person>k;
   while(run)
   {
     String menuePunkt = menue();
@@ -44,9 +49,9 @@ void main()
       
         String name = nameEingabe();
         int alter = alterEingabe('Alter');
-        int telefonNR = telefonNREingabe();
+        String telefonNR = telefonNREingabe();
 
-        if(kontakte.any((k) => k.name == name && k.alter == alter && k.telefonnummer == telefonNR))
+        if(kontakte.any((k) => k.name.toLowerCase() == name.toLowerCase() && k.alter == alter && k.telefonnummer == telefonNR))
         {
           print("\nDieser Kontakt existiert bereits.\n");
         }
@@ -62,7 +67,7 @@ void main()
     
         String name = nameEingabe();
         int alter = alterEingabe('Alter');
-        int telefonNR = telefonNREingabe();
+        String telefonNR = telefonNREingabe();
 
         kontakte.removeWhere
         (
@@ -100,7 +105,7 @@ void main()
             sucheNachAlterBereich(kontakte, alterMin, alterMax);
 
           case 'telefon':
-            int telefonNR = telefonNREingabe();
+            String telefonNR = telefonNREingabe();
             sucheNachTelefonNR(kontakte, telefonNR);
           break;
           
@@ -115,6 +120,7 @@ void main()
       break;
 
       case 'beenden':
+        speicherKontakte(kontakte);
         run = false;
         print("-------------------\n Programm beendet.\n-------------------\n");
       break;
@@ -265,7 +271,7 @@ int alterEingabe(String ausgabeAnzeige)
   }
 }
 
-int telefonNREingabe()
+String telefonNREingabe()
 {
   while(true)
   {
@@ -274,19 +280,12 @@ int telefonNREingabe()
 
     if(telefonEingabe != null && telefonEingabe.isNotEmpty)
     {
-      if(int.tryParse(telefonEingabe) != null)
-      {
-        int telefonNR = int.parse(telefonEingabe);
-        if(telefonNR >= 0)
-        {
-          return telefonNR;
-        }
-      }
-      else
-      {
-        print("ungültige Telefonnummer - Bitte nur Zahlen eingeben.\n");
-      }  
+      return telefonEingabe;
     }
+    else
+    {
+      print("ungültige Telefonnummer - Bitte nur Zahlen eingeben.\n");
+    }  
   }
 }
 
@@ -340,7 +339,7 @@ void sucheNachAlterBereich(List<Person> kontakte, int alterMin, int alterMax)
   zeigeKontakte(gefunden);
 }
 
-void sucheNachTelefonNR(List<Person> kontakte, int telefonNR)
+void sucheNachTelefonNR(List<Person> kontakte, String telefonNR)
 {
   var gefunden = kontakte.where((k) => k.telefonnummer == telefonNR).toList();    
        
@@ -360,6 +359,33 @@ List<Person> sortiereListe(List<Person> kontakte)
   kopieKontakte.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
   return kopieKontakte;
 }
+
+Future<void> speicherKontakte(List<Person> kontakte) async
+{
+  var jsonListe = kontakte.map((person) => person.toJson()).toList(); //Liste(Person) zu Liste(Map)
+
+  String jsonString = jsonEncode(jsonListe);                          //Liste(Map) zu String
+  
+  File datei = File('kontakte.json');                                 
+  await datei.writeAsString(jsonString);                              //String zu Datei
+
+  print("Kontakte erfolgreich gespeichert.\n");
+}
+
+Future<List<Person>> ladeKontakte() async {
+  try
+  {
+    String jsonString = await File('kontakte.json').readAsString();       //Datei zu String
+    List<dynamic> jsonListe = jsonDecode(jsonString);                     //String zu Liste(Map)
+    return jsonListe.map((eintrag) => Person.fromJson(eintrag)).toList(); //Liste(Map) zu Liste(Person)
+  }
+  catch (e)
+  {
+    print("Fehler beim Laden: $e");
+    return []; // Leere Liste zurückgeben, wenn Datei fehlt oder fehlerhaft
+  }
+}
+
 
 
 // Ausgaben
