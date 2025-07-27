@@ -31,13 +31,12 @@ class Person
 }
 
 
-void main()
+Future<void> main() async
 {
-  List<Person> kontakte = [];
+  List<Person> kontakte = await ladeKontakte();
   bool run = true;
 
-  // Future<List<Person>>k = ladeKontakte();
-  // kontakte = List<Person>k;
+
   while(run)
   {
     String menuePunkt = menue();
@@ -120,7 +119,7 @@ void main()
       break;
 
       case 'beenden':
-        speicherKontakte(kontakte);
+        await speicherKontakte(kontakte);
         run = false;
         print("-------------------\n Programm beendet.\n-------------------\n");
       break;
