@@ -3,13 +3,13 @@ import 'dart:convert';
 
 
 
-class Person
+class Kontakt
 {
   String name;
   int alter;
   String telefonnummer;
 
-  Person(this.name, this.alter, this.telefonnummer);
+  Kontakt(this.name, this.alter, this.telefonnummer);
 
   void ausgabe()
   {
@@ -24,7 +24,7 @@ class Person
     };
   }
 
-  Person.fromJson(Map<String, dynamic> json):
+  Kontakt.fromJson(Map<String, dynamic> json):
       name = json['name'],
       alter = json['alter'],
       telefonnummer = json['telefonnummer'];
@@ -35,7 +35,7 @@ Future<void> main() async
 {
   bool run = true;
   String speicherdatei = 'kontakte.json';
-  List<Person> kontakte = await ladeKontakte(speicherdatei);
+  List<Kontakt> kontaktListe = await ladeKontakte(speicherdatei);
 
 
   while(run)
@@ -51,13 +51,13 @@ Future<void> main() async
         int alter = alterEingabe('Alter');
         String telefonNR = telefonNREingabe();
 
-        if(kontakte.any((k) => k.name.toLowerCase() == name.toLowerCase() && k.alter == alter && k.telefonnummer == telefonNR))
+        if(kontaktListe.any((kontakt) => kontakt.name.toLowerCase() == name.toLowerCase() && kontakt.alter == alter && kontakt.telefonnummer == telefonNR))
         {
           print("\nDieser Kontakt existiert bereits.\n");
         }
         else
         {
-          kontakte.add(Person(name, alter, telefonNR));
+          kontaktListe.add(Kontakt(name, alter, telefonNR));
           print("");  
         }
       break;
@@ -69,7 +69,7 @@ Future<void> main() async
         int alter = alterEingabe('Alter');
         String telefonNR = telefonNREingabe();
 
-        kontakte.removeWhere
+        kontaktListe.removeWhere
         (
           (kontakt) =>
             kontakt.name == name &&
@@ -80,7 +80,7 @@ Future<void> main() async
 
       case 'anzeigen':
         print("-----------\n Kontakte:\n-----------");
-        zeigeKontakte(sortiereListe(kontakte));
+        zeigeKontakte(sortiereListe(kontaktListe));
       break;
 
       case 'suchen':
@@ -90,24 +90,24 @@ Future<void> main() async
         {
           case 'name':
             String name = nameEingabe();
-            sucheNachName(kontakte, name);
+            sucheNachName(kontaktListe, name);
           break;
 
           case 'alterGenau':
             int alter = alterEingabe('Alter');
-            sucheNachAlterGenau(kontakte, alter);
+            sucheNachAlterGenau(kontaktListe, alter);
           break;
 
           case 'alterBereich':
             print("--------------\nAltersbereich:\n--------------\n");
             int alterMin = alterEingabe('Von');
             int alterMax = alterEingabe('Bis');
-            sucheNachAlterBereich(kontakte, alterMin, alterMax);
+            sucheNachAlterBereich(kontaktListe, alterMin, alterMax);
           break;
 
           case 'telefon':
             String telefonNR = telefonNREingabe();
-            sucheNachTelefonNR(kontakte, telefonNR);
+            sucheNachTelefonNR(kontaktListe, telefonNR);
           break;
           
           case 'abbruch':
@@ -121,7 +121,7 @@ Future<void> main() async
       break;
 
       case 'beenden':
-        await speicherKontakte(kontakte, speicherdatei);
+        await speicherKontakte(kontaktListe, speicherdatei);
         run = false;
         print("-------------------\n Programm beendet.\n-------------------\n");
       break;
@@ -292,9 +292,9 @@ String telefonNREingabe()
 
 
 // Datenverabrbeitung
-void sucheNachName(List<Person> kontakte, String name)
+void sucheNachName(List<Kontakt> kontaktListe, String name)
 {
-  var gefunden = kontakte.where((k) => k.name.toLowerCase().contains(name.toLowerCase())).toList();    
+  var gefunden = kontaktListe.where((kontakt) => kontakt.name.toLowerCase().contains(name.toLowerCase())).toList();    
        
   if(gefunden.isEmpty)
   {
@@ -305,9 +305,9 @@ void sucheNachName(List<Person> kontakte, String name)
   zeigeKontakte(sortiereListe(gefunden));   
 }
 
-void sucheNachAlterGenau(List<Person> kontakte, int alter)
+void sucheNachAlterGenau(List<Kontakt> kontaktListe, int alter)
 {
-  var gefunden = kontakte.where((k) => k.alter == alter).toList();    
+  var gefunden = kontaktListe.where((kontakt) => kontakt.alter == alter).toList();    
        
   if(gefunden.isEmpty)
   {
@@ -318,7 +318,7 @@ void sucheNachAlterGenau(List<Person> kontakte, int alter)
   zeigeKontakte(gefunden);   
 }
 
-void sucheNachAlterBereich(List<Person> kontakte, int alterMin, int alterMax)
+void sucheNachAlterBereich(List<Kontakt> kontaktListe, int alterMin, int alterMax)
 {
   var gefunden;
 
@@ -329,7 +329,7 @@ void sucheNachAlterBereich(List<Person> kontakte, int alterMin, int alterMax)
     alterMax = tauschVar;
   }
 
-  gefunden = kontakte.where((k) => k.alter >= alterMin && k.alter <= alterMax).toList();
+  gefunden = kontaktListe.where((kontakt) => kontakt.alter >= alterMin && kontakt.alter <= alterMax).toList();
 
   if(gefunden.isEmpty)
   {
@@ -340,9 +340,9 @@ void sucheNachAlterBereich(List<Person> kontakte, int alterMin, int alterMax)
   zeigeKontakte(gefunden);
 }
 
-void sucheNachTelefonNR(List<Person> kontakte, String telefonNR)
+void sucheNachTelefonNR(List<Kontakt> kontaktListe, String telefonNR)
 {
-  var gefunden = kontakte.where((k) => k.telefonnummer == telefonNR).toList();    
+  var gefunden = kontaktListe.where((kontakt) => kontakt.telefonnummer == telefonNR).toList();    
        
   if(gefunden.isEmpty)
   {
@@ -353,17 +353,19 @@ void sucheNachTelefonNR(List<Person> kontakte, String telefonNR)
   zeigeKontakte(gefunden);   
 }
 
-List<Person> sortiereListe(List<Person> kontakte)
+List<Kontakt> sortiereListe(List<Kontakt> kontaktListe)
 {
-  var kopieKontakte = List<Person>.from(kontakte); // Erstellt Kopie - Alternative_var copy = [...kontakte]; 
-
-  kopieKontakte.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-  return kopieKontakte;
+  var kopieKontaktListe = List<Kontakt>.from(kontaktListe); // Erstellt Kopie - Alternative_var copy = [...kontaktListe]; 
+  
+  kopieKontaktListe.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+  return kopieKontaktListe;
 }
 
-Future<void> speicherKontakte(List<Person> kontakte, String dateiname) async
+
+// Speichern & Laden
+Future<void> speicherKontakte(List<Kontakt> kontakteListe, String dateiname) async
 {
-  var jsonListe = kontakte.map((person) => person.toJson()).toList(); //Liste(Person) zu Liste(Map)
+  var jsonListe = kontakteListe.map((kontakt) => kontakt.toJson()).toList(); //Liste(Person) zu Liste(Map)
 
   String jsonString = jsonEncode(jsonListe);                          //Liste(Map) zu String
   
@@ -373,12 +375,12 @@ Future<void> speicherKontakte(List<Person> kontakte, String dateiname) async
   print("Kontakte erfolgreich gespeichert.\n");
 }
 
-Future<List<Person>> ladeKontakte(String dateiname) async {
+Future<List<Kontakt>> ladeKontakte(String dateiname) async {
   try
   {
     String jsonString = await File(dateiname).readAsString();       //Datei zu String
     List<dynamic> jsonListe = jsonDecode(jsonString);                     //String zu Liste(Map)
-    return jsonListe.map((eintrag) => Person.fromJson(eintrag)).toList(); //Liste(Map) zu Liste(Person)
+    return jsonListe.map((eintrag) => Kontakt.fromJson(eintrag)).toList(); //Liste(Map) zu Liste(Person)
   }
   catch (e)
   {
@@ -390,14 +392,14 @@ Future<List<Person>> ladeKontakte(String dateiname) async {
 
 
 // Ausgaben
-void zeigeKontakte(List<Person> kontaktListe)
+void zeigeKontakte(List<Kontakt> kontaktListe)
 {
   int anzahl = kontaktListe.length;
   print("\n$anzahl Kontakte gefunden.\n");
   
-  for(var k in kontaktListe)
+  for(var kontakt in kontaktListe)
   {
-    k.ausgabe();
+    kontakt.ausgabe();
   }
   print("");
 }
