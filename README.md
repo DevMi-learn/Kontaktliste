@@ -24,7 +24,7 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   -  Umgang mit Dateispeicherung (Lesen/Schreiben von JSON)
   -  Schrittweiser Ausbau und Planung eines Projekts
 
---- ---
+------
 
 ## Technologien
 
