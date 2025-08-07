@@ -17,7 +17,6 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   -  Duplikatprüfung komplettieren (TelefonNr)
   -  Nutzung von SQLite oder alternativen Speichermethoden
 
-
 ## Was ich dabei lerne
 
   -  Strukturierung und Aufbau von Dart-Projekten
@@ -42,6 +41,5 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   3.  Programm starten: 'dart main.dart'
 
 
----
 ---
 Dieses Projekt wird zum Gewinn neuer Kenntnisse kontinuierlich erweitert.
