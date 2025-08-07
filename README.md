@@ -17,12 +17,16 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   -  Duplikatprüfung komplettieren (TelefonNr)
   -  Nutzung von SQLite oder alternativen Speichermethoden
 
+---
+
 ## Was ich dabei lerne
 
   -  Strukturierung und Aufbau von Dart-Projekten
   -  Anwendung objektorientierter Konzepte (z. B. Klassen, Methoden)
   -  Umgang mit Dateispeicherung (Lesen/Schreiben von JSON)
   -  Schrittweiser Ausbau und Planung eines Projekts
+
+---
 
 ## Technologien
 
