@@ -17,7 +17,6 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   -  Duplikatprüfung komplettieren (TelefonNr)
   -  Nutzung von SQLite oder alternativen Speichermethoden
 
----
 
 ## Was ich dabei lerne
 
