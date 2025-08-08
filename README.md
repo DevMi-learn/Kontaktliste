@@ -33,6 +33,7 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   -  Datei-Handling (lokale JSON-Datei)
 
 ## Beispielcode
+´´´dart
   class Kontakt
 {
   String name;
