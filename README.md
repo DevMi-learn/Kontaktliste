@@ -36,7 +36,7 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
 
 ## Nutzung
 
-  1.  Repository clonen: 'git clone https://github.com/deinname/Kontaktliste.git'
+  1.  Repository clonen: 'git clone https://github.com/elias-fletzberger/Kontaktliste.git'
   2.  Ins Verzeichnis wechseln: 'cd Kontaktliste'
   3.  Programm starten: 'dart main.dart'
 
