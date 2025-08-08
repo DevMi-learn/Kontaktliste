@@ -33,7 +33,7 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   -  Datei-Handling (lokale JSON-Datei)
 
 ## Beispielcode
-´´´dart
+```
   class Kontakt
 {
   String name;
@@ -45,7 +45,7 @@ Aktuell handelt es sich um eine rein konsolenbasierte Version in Dart. Eine graf
   .
   .
 }
-´´´
+```
 ## Nutzung
 
   1.  Repository clonen: 'git clone https://github.com/elias-fletzberger/Kontaktliste.git'
