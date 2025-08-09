@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
 
@@ -263,6 +264,10 @@ int alterEingabe(String ausgabeAnzeige)
         {
           return alter;
         }
+        else
+        {
+          print("ungültiges Alter - Alter kann nicht negativ sein.\n");
+        }
       }
       else
       {
@@ -281,7 +286,32 @@ String telefonNREingabe()
 
     if(telefonEingabe != null && telefonEingabe.isNotEmpty)
     {
-      return telefonEingabe;
+      if(telefonEingabe.startsWith("+"))
+      {
+        if(int.tryParse(telefonEingabe.substring(1, telefonEingabe.length-1)) != null)
+        {
+          return telefonEingabe;
+        }
+        else
+        {
+          print("ungültige Telefonnummer - Bitte Nummer ohne Leerzeichen und Buchstaben eingeben.\n");
+        }
+      }
+      else if(telefonEingabe.startsWith("0"))
+      {
+        if(int.tryParse(telefonEingabe.substring(1, telefonEingabe.length-1)) != null)
+        {
+          return telefonEingabe;
+        }
+        else
+        {
+          print("ungültige Telefonnummer - Bitte Nummer ohne Leerzeichen und Buchstaben eingeben.\n");
+        }
+      }
+      else
+      {
+        print("ungültige Telefonnummer - Telefonnummer muss mit +/0 beginnen und darf nur aus Zahlen ohne Leerzeichen bestehen.\n");
+      }
     }
     else
     {
